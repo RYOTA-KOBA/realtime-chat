@@ -3,32 +3,37 @@ import "./App.css";
 import { db } from "./firebase";
 
 const App: React.FC = () => {
-  const [userdata, setUserdata] = useState([]);
+  const [chatdata, setChatdata] = useState([]);
 
   useEffect(() => {
-    db.collection("users")
-      .get()
-      .then((snapshots: any) => {
-        const userArray: any = [];
-        snapshots.docs.forEach((doc: any) => {
-          const data = doc.data();
-          userArray.push({
-            id: doc.id,
-            username: data.username,
-            created_at: data.created_at,
-          });
-        });
-        setUserdata(userArray);
+    let chats: any = [];
+    db.collection("chats").onSnapshot((snapshots) => {
+      snapshots.docChanges().forEach((change) => {
+        const data = change.doc.data({ serverTimestamps: "estimate" });
+        const changeType = change.type;
+
+        switch (changeType) {
+          case "added":
+            chats.push(data);
+            break;
+          case "removed":
+            chats = chats.filter((chat: any) => chat.id !== change.doc.id);
+            break;
+          default:
+            break;
+        }
       });
-  }, []);
+      setChatdata(chats);
+    });
+  }, [setChatdata]);
 
   return (
     <>
-      {console.log(userdata)}
-      {userdata &&
-        userdata.map((d: any) => (
+      {console.log(chatdata)}
+      {chatdata &&
+        chatdata.map((d: any) => (
           <ul key={d.id}>
-            <li>{d.username}</li>
+            <li>{d.message}</li>
           </ul>
         ))}
     </>
