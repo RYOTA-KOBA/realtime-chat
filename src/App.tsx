@@ -1,9 +1,10 @@
 import React, { useEffect, useState, useCallback } from "react";
-import "./App.css";
+import "./styles/App.css";
 import { db, timestamp } from "./firebase";
 
 import UsernameForm from "./components/UsernameForm";
 import MessageForm from "./components/MessageForm";
+import ChatList from "./components/ChatList";
 
 type Chats = Partial<{
   id: string;
@@ -84,13 +85,12 @@ const App: React.FC = () => {
       {console.log(chatdata)}
       {chatdata &&
         chatdata.map((d: Chats) => (
-          <ul key={d.id}>
-            <li>
-              <span>{d.username}</span>
-              &nbsp;
-              {d.message}
-            </li>
-          </ul>
+          <ChatList
+            key={d.id}
+            username={d.username}
+            message={d.message}
+            created_at={d.created_at}
+          />
         ))}
       {username !== "" ? (
         <MessageForm
