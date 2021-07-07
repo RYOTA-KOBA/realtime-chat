@@ -1,8 +1,17 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    match /{document=**} {
-      allow read, write: if true;
+
+    function isValidChatCreate(chat) {
+      return chat.size() >= 2
+      && 'username' in chat && chat.username is string
+      && 'created_at' in chat && chat.created_at is timestamp
+    }
+
+    match /chats/{chatId} {
+      allow read: if true
+      allow create: if isValidChatCreate(request.resource.data)
+      allow delete: if true
     }
   }
 }
