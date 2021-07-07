@@ -1,13 +1,37 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import "./App.css";
 import { db, timestamp } from "./firebase";
 
+import UsernameForm from "./components/UsernameForm";
+import MessageForm from "./components/MessageForm";
+
+type Chats = Partial<{
+  id: string;
+  created_at: number;
+  username: string;
+  message: string;
+}>;
+
 const App: React.FC = () => {
-  const [chatdata, setChatdata] = useState([]);
-  const [isMessageCreated, setIsMessageCreated] = useState(false);
-  const [formValue, setFormValue] = useState("");
-  const [usernameValue, setUsernameValue] = useState("");
-  const [username, setUsername] = useState("");
+  const [chatdata, setChatdata] = useState<Chats[]>([]);
+  const [isMessageCreated, setIsMessageCreated] = useState<boolean>(false);
+  const [messageValue, setMessageValue] = useState<string>("");
+  const [usernameValue, setUsernameValue] = useState<string>("");
+  const [username, setUsername] = useState<string>("");
+
+  const inputMessage = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      setMessageValue(e.target.value);
+    },
+    [setMessageValue]
+  );
+
+  const inputUsername = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      setUsernameValue(e.target.value);
+    },
+    [setUsernameValue]
+  );
 
   const sendUsername = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -21,12 +45,12 @@ const App: React.FC = () => {
 
     if (username) {
       await db.collection("chats").add({
-        message: formValue,
+        message: messageValue,
         created_at: timestamp,
         username: username,
       });
     }
-    setFormValue("");
+    setMessageValue("");
   };
 
   useEffect(() => {
@@ -44,7 +68,7 @@ const App: React.FC = () => {
               setIsMessageCreated(true);
               break;
             case "removed":
-              chats = chats.filter((chat: any) => chat.id !== change.doc.id);
+              chats = chats.filter((chat: Chats) => chat.id !== change.doc.id);
               break;
             default:
               break;
@@ -59,7 +83,7 @@ const App: React.FC = () => {
     <>
       {console.log(chatdata)}
       {chatdata &&
-        chatdata.map((d: any) => (
+        chatdata.map((d: Chats) => (
           <ul key={d.id}>
             <li>
               <span>{d.username}</span>
@@ -69,29 +93,17 @@ const App: React.FC = () => {
           </ul>
         ))}
       {username !== "" ? (
-        <form onSubmit={sendMessage}>
-          <input
-            type="text"
-            value={formValue}
-            onChange={(e) => setFormValue(e.target.value)}
-            placeholder="メッセージを入力"
-          />
-
-          <button type="submit" disabled={!formValue}>
-            送信
-          </button>
-        </form>
+        <MessageForm
+          sendMessage={sendMessage}
+          inputMessage={inputMessage}
+          messageValue={messageValue}
+        />
       ) : (
-        <form onSubmit={sendUsername}>
-          <input
-            type="text"
-            onChange={(e) => setUsernameValue(e.target.value)}
-            placeholder="名前を入力"
-          />
-          <button type="submit" disabled={!usernameValue}>
-            ログイン
-          </button>
-        </form>
+        <UsernameForm
+          sendUsername={sendUsername}
+          inputUsername={inputUsername}
+          usernameValue={usernameValue}
+        />
       )}
     </>
   );
