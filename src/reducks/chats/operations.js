@@ -1,28 +1,33 @@
-import { addMessageAction } from "./actions";
-// import { db, timestamp } from "../../firebase";
+import { db } from "../../firebase";
+import { addUsernameAction } from "../chats/actions";
 
-export const addMessage = () => {
-  return async (dispatch, getState) => {
-    const state = getState();
-    const message = state.chats.message;
-    // const username = state.chats.username;
-    const created_at = state.chats.created_at;
-
-    const url = "https://api.github.com/users/RYOTA-KOBA";
-
-    const response = await fetch(url)
-      .then((res) => res.json())
-      .catch(() => null);
-
-    const username = response.login;
-
-    dispatch(
-      addMessageAction({
-        id: "a1b1c1",
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+export const addMessage = (message, username, created_at) => {
+  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+  return async () => {
+    if (username) {
+      await db.collection("chats").add({
+        message: message,
         username: username,
-        message: "thunkのテスト",
-        created_at: 12345,
-      })
-    );
+        created_at: created_at,
+      });
+    }
+  };
+};
+
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+export const addUsername = (username) => {
+  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+  return (dispatch) => {
+    if (username) {
+      dispatch(
+        addUsernameAction({
+          id: "",
+          username: username,
+          message: "",
+          created_at: null,
+        })
+      );
+    }
   };
 };
