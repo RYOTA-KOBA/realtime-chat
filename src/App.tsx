@@ -1,13 +1,13 @@
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState } from "react";
 import "./styles/App.css";
-import { db, timestamp } from "./firebase";
-import { useDispatch } from "react-redux";
-import { addMessage } from "./reducks/chats/operations";
+import { db } from "./firebase";
+import { useSelector } from "react-redux";
+import { getUsername } from "./reducks/chats/selectors";
 
 import UsernameForm from "./components/UsernameForm";
 import MessageForm from "./components/MessageForm";
 import ChatList from "./components/ChatList";
-import Test from "./Test";
+import DisplayUsername from "./DisplayUsername";
 
 type Chats = Partial<{
   id: string;
@@ -19,45 +19,9 @@ type Chats = Partial<{
 const App: React.FC = () => {
   const [chatdata, setChatdata] = useState<Chats[]>([]);
   const [isMessageCreated, setIsMessageCreated] = useState<boolean>(false);
-  const [messageValue, setMessageValue] = useState<string>("");
-  const [usernameValue, setUsernameValue] = useState<string>("");
-  const [username, setUsername] = useState<string>("");
 
-  const dispatch = useDispatch();
-
-  const inputMessage = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>) => {
-      setMessageValue(e.target.value);
-    },
-    [setMessageValue]
-  );
-
-  const inputUsername = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>) => {
-      setUsernameValue(e.target.value);
-    },
-    [setUsernameValue]
-  );
-
-  const sendUsername = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
-    setUsername(usernameValue);
-    setUsernameValue("");
-  };
-
-  const sendMessage = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
-    if (username) {
-      await db.collection("chats").add({
-        message: messageValue,
-        created_at: timestamp,
-        username: username,
-      });
-    }
-    setMessageValue("");
-  };
+  const selector = useSelector((state) => state);
+  const username = getUsername(selector);
 
   useEffect(() => {
     let chats: any = [];
@@ -87,8 +51,6 @@ const App: React.FC = () => {
 
   return (
     <>
-      {/* {console.log(chatdata)} */}
-      <button onClick={() => dispatch(addMessage())}>テストボタン</button>
       {chatdata &&
         chatdata.map((d: Chats) => (
           <ChatList
@@ -98,20 +60,10 @@ const App: React.FC = () => {
             created_at={d.created_at}
           />
         ))}
-      {username !== "" ? (
-        <MessageForm
-          sendMessage={sendMessage}
-          inputMessage={inputMessage}
-          messageValue={messageValue}
-        />
-      ) : (
-        <UsernameForm
-          sendUsername={sendUsername}
-          inputUsername={inputUsername}
-          usernameValue={usernameValue}
-        />
-      )}
-      <Test />
+      <div style={{ display: "flex" }}>
+        <DisplayUsername />
+        {username !== "" ? <MessageForm /> : <UsernameForm />}
+      </div>
     </>
   );
 };
