@@ -9,6 +9,11 @@ export const ChatsReducer = (state = initialState.chats, action) => {
         ...state,
         ...action.payload,
       };
+    case Actions.ADD_USERNAME:
+      return {
+        ...state,
+        ...action.payload,
+      };
     default:
       return state;
   }
