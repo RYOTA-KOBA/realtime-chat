@@ -1,22 +1,39 @@
-import React from "react";
+import React, { useState, useCallback } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { addMessage } from "../reducks/chats/operations";
+import { getUsername } from "../reducks/chats/selectors";
+import { timestamp } from "../firebase";
 
-type P = {
-  sendMessage: (e: React.FormEvent<HTMLFormElement>) => void;
-  inputMessage: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  messageValue: string;
-};
+const MessageForm: React.FC = () => {
+  const dispatch = useDispatch();
+  const selector = useSelector((state) => state);
+  const username = getUsername(selector);
+  const [messageValue, setMessageValue] = useState<string>("");
 
-const MessageForm: React.FC<P> = (props: P) => {
+  const inputMessage = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      setMessageValue(e.target.value);
+    },
+    [setMessageValue]
+  );
+
+  const sendMessage = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    dispatch(addMessage(messageValue, username, timestamp));
+    setMessageValue("");
+  };
+
   return (
-    <form onSubmit={props.sendMessage}>
+    <form onSubmit={sendMessage}>
       <input
         type="text"
-        value={props.messageValue}
-        onChange={props.inputMessage}
+        value={messageValue}
+        onChange={inputMessage}
         placeholder="メッセージを入力"
       />
 
-      <button type="submit" disabled={!props.messageValue}>
+      <button type="submit" disabled={!messageValue}>
         送信
       </button>
     </form>

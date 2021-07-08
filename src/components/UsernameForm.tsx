@@ -1,20 +1,29 @@
-import React from "react";
+import React, { useState, useCallback } from "react";
+import { useDispatch } from "react-redux";
+import { addUsername } from "../reducks/chats/operations";
 
-type P = {
-  sendUsername: (e: React.FormEvent<HTMLFormElement>) => void;
-  inputUsername: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  usernameValue: string;
-};
+const InputUsername: React.FC = () => {
+  const dispatch = useDispatch();
+  const [usernameValue, setUsernameValue] = useState<string>("");
 
-const InputUsername: React.FC<P> = (props) => {
+  const inputUsername = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      setUsernameValue(e.target.value);
+    },
+    [setUsernameValue]
+  );
+
+  const sendUsername = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    dispatch(addUsername(usernameValue));
+    setUsernameValue("");
+  };
+
   return (
-    <form onSubmit={props.sendUsername}>
-      <input
-        type="text"
-        onChange={props.inputUsername}
-        placeholder="名前を入力"
-      />
-      <button type="submit" disabled={!props.usernameValue}>
+    <form onSubmit={sendUsername}>
+      <input type="text" onChange={inputUsername} placeholder="名前を入力" />
+      <button type="submit" disabled={!usernameValue}>
         ログイン
       </button>
     </form>
