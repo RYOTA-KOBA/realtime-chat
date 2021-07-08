@@ -1,12 +1,13 @@
 import React, { useEffect, useState, useCallback } from "react";
 import "./styles/App.css";
 import { db, timestamp } from "./firebase";
-import { useSelector, useDispatch } from "react-redux";
-import { addMessageAction } from "./reducks/chats/actions";
+import { useDispatch } from "react-redux";
+import { addMessage } from "./reducks/chats/operations";
 
 import UsernameForm from "./components/UsernameForm";
 import MessageForm from "./components/MessageForm";
 import ChatList from "./components/ChatList";
+import Test from "./Test";
 
 type Chats = Partial<{
   id: string;
@@ -23,9 +24,6 @@ const App: React.FC = () => {
   const [username, setUsername] = useState<string>("");
 
   const dispatch = useDispatch();
-  const selector = useSelector((state: any) => state);
-
-  console.log(selector.chats);
 
   const inputMessage = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -89,20 +87,8 @@ const App: React.FC = () => {
 
   return (
     <>
-      {console.log(chatdata)}
-      <button
-        onClick={() =>
-          dispatch(
-            addMessageAction({
-              id: "a1b2c3",
-              username: "テスト",
-              created_at: 20210708,
-            })
-          )
-        }
-      >
-        クリック
-      </button>
+      {/* {console.log(chatdata)} */}
+      <button onClick={() => dispatch(addMessage())}>テストボタン</button>
       {chatdata &&
         chatdata.map((d: Chats) => (
           <ChatList
@@ -125,6 +111,7 @@ const App: React.FC = () => {
           usernameValue={usernameValue}
         />
       )}
+      <Test />
     </>
   );
 };
