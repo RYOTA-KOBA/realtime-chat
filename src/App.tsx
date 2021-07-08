@@ -1,6 +1,8 @@
 import React, { useEffect, useState, useCallback } from "react";
 import "./styles/App.css";
 import { db, timestamp } from "./firebase";
+import { useSelector, useDispatch } from "react-redux";
+import { addMessageAction } from "./reducks/chats/actions";
 
 import UsernameForm from "./components/UsernameForm";
 import MessageForm from "./components/MessageForm";
@@ -19,6 +21,11 @@ const App: React.FC = () => {
   const [messageValue, setMessageValue] = useState<string>("");
   const [usernameValue, setUsernameValue] = useState<string>("");
   const [username, setUsername] = useState<string>("");
+
+  const dispatch = useDispatch();
+  const selector = useSelector((state: any) => state);
+
+  console.log(selector.chats);
 
   const inputMessage = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -83,6 +90,19 @@ const App: React.FC = () => {
   return (
     <>
       {console.log(chatdata)}
+      <button
+        onClick={() =>
+          dispatch(
+            addMessageAction({
+              id: "a1b2c3",
+              username: "テスト",
+              created_at: 20210708,
+            })
+          )
+        }
+      >
+        クリック
+      </button>
       {chatdata &&
         chatdata.map((d: Chats) => (
           <ChatList
