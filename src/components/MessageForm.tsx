@@ -2,11 +2,11 @@ import React, { useState, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { addMessage } from "../reducks/chats/operations";
 import { getUsername } from "../reducks/chats/selectors";
-import { timestamp } from "../firebase";
+import { InitialChatsState } from "../reducks/chats/types";
 
 const MessageForm: React.FC = () => {
   const dispatch = useDispatch();
-  const selector = useSelector((state) => state);
+  const selector = useSelector((state: InitialChatsState) => state);
   const username = getUsername(selector);
   const [messageValue, setMessageValue] = useState<string>("");
 
@@ -20,7 +20,7 @@ const MessageForm: React.FC = () => {
   const sendMessage = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    dispatch(addMessage(messageValue, username, timestamp));
+    dispatch(addMessage(messageValue, username));
     setMessageValue("");
   };
 

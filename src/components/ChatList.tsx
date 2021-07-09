@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { fetchChatsdata } from "../reducks/chats/selectors";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchChats } from "../reducks/chats/operations";
+import { InitialChatsState } from "../reducks/chats/types";
 
 type Chats = Partial<{
   id: string;
@@ -12,7 +13,7 @@ type Chats = Partial<{
 
 const ChatList: React.FC = () => {
   const dispatch = useDispatch();
-  const selector = useSelector((state) => state);
+  const selector = useSelector((state: InitialChatsState) => state);
   const chatsdata = fetchChatsdata(selector);
 
   useEffect(() => {

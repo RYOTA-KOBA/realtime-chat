@@ -6,11 +6,13 @@ import {
 import thunk from "redux-thunk";
 import { ChatsReducer } from "../chats/reducers";
 
-export default function createStore() {
+const createStore = () => {
   return reduxCreateStore(
     combineReducers({
       chats: ChatsReducer,
     }),
     applyMiddleware(thunk)
   );
-}
+};
+
+export default createStore;
