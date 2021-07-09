@@ -25,3 +25,12 @@ export const addUsernameAction = (chatState) => {
     },
   };
 };
+
+export const FETCH_CHATS = "FETCH_CHATS";
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+export const fetchChatsAcrion = (chatsdata) => {
+  return {
+    type: "FETCH_CHATS",
+    payload: chatsdata,
+  };
+};
