@@ -1,18 +1,15 @@
 import { db } from "../../firebase";
 import { addUsernameAction, fetchChatsAction } from "./actions";
 import { Dispatch } from "redux";
+import { timestamp } from "../../firebase";
 
-export const addMessage = (
-  message: string,
-  username: string,
-  created_at: number
-) => {
+export const addMessage = (message: string, username: string) => {
   return async (): Promise<void> => {
     if (username) {
       await db.collection("chats").add({
         message: message,
         username: username,
-        created_at: created_at,
+        created_at: timestamp,
       });
     }
   };
@@ -35,7 +32,7 @@ export const addUsername = (username: string) => {
 
 export const fetchChats = () => {
   return async (dispatch: Dispatch): Promise<void> => {
-    const chats: any[] = [];
+    const chats: any = [];
     db.collection("chats")
       .orderBy("created_at")
       .onSnapshot((snapshots) => {
