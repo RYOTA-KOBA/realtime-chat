@@ -1,23 +1,24 @@
 import { createSelector } from "reselect";
+import { ChatsState, InitialChatsState } from "./types";
 
-const chatsSelector = (state: any) => state.chats;
+const chatsSelector = (state: InitialChatsState) => state.chats;
 
 export const getUsername = createSelector(
   [chatsSelector],
-  (state: any) => state.username
+  (state: ChatsState) => state.username
 );
 
 export const getMessage = createSelector(
   [chatsSelector],
-  (state: any) => state.message
+  (state: ChatsState) => state.message
 );
 
 export const getCreatedAt = createSelector(
   [chatsSelector],
-  (state: any) => state.created_at
+  (state: ChatsState) => state.created_at
 );
 
 export const fetchChatsdata = createSelector(
   [chatsSelector],
-  (state: any) => state.chatsdata
+  (state: ChatsState) => state.chatsdata
 );

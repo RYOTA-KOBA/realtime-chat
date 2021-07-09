@@ -1,8 +1,12 @@
+import { AnyAction } from "redux";
 import * as Actions from "./actions";
 import initialState from "../store/initialState";
+import { ChatsState } from "./types";
 
-// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-export const ChatsReducer = (state = initialState.chats, action) => {
+export const ChatsReducer = (
+  state: ChatsState = initialState.chats,
+  action: AnyAction
+): ChatsState => {
   switch (action.type) {
     case Actions.ADD_MESSAGE:
       return {

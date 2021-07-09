@@ -3,7 +3,7 @@ const initialState = {
     id: "",
     username: "",
     message: "",
-    created_at: Number,
+    created_at: Number(null),
     chatsdata: [],
   },
 };
