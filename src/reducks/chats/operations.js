@@ -1,5 +1,5 @@
 import { db } from "../../firebase";
-import { addUsernameAction } from "../chats/actions";
+import { addUsernameAction, fetchChatsAcrion } from "../chats/actions";
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export const addMessage = (message, username, created_at) => {
@@ -29,5 +29,34 @@ export const addUsername = (username) => {
         })
       );
     }
+  };
+};
+
+export const fetchChats = () => {
+  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+  return async (dispatch) => {
+    let chats: any = [];
+    db.collection("chats")
+      .orderBy("created_at")
+      .onSnapshot((snapshots) => {
+        snapshots.docChanges().forEach((change) => {
+          const data = change.doc.data({ serverTimestamps: "estimate" });
+          const changeType = change.type;
+
+          switch (changeType) {
+            case "added":
+              chats.push({ ...data, id: change.doc.id });
+              // setIsMessageCreated(true);
+              break;
+            case "removed":
+              chats = chats.filter((chat) => chat.id !== change.doc.id);
+              break;
+            default:
+              break;
+          }
+        });
+        dispatch(fetchChatsAcrion(chats));
+        // setIsMessageCreated(false);
+      });
   };
 };
