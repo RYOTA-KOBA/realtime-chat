@@ -14,6 +14,11 @@ export const ChatsReducer = (state = initialState.chats, action) => {
         ...state,
         ...action.payload,
       };
+    case Actions.FETCH_CHATS:
+      return {
+        ...state,
+        chatsdata: action.payload,
+      };
     default:
       return state;
   }

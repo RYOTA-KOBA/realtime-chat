@@ -16,3 +16,8 @@ export const getCreatedAt = createSelector(
   [chatsSelector],
   (state: any) => state.created_at
 );
+
+export const fetchChatsdata = createSelector(
+  [chatsSelector],
+  (state: any) => state.chatsdata
+);
