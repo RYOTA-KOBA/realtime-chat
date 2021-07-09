@@ -1,20 +1,35 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { fetchChatsdata } from "../reducks/chats/selectors";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchChats } from "../reducks/chats/operations";
 
-type Props = Partial<{
+type Chats = Partial<{
+  id: string;
+  created_at: number;
   username: string;
   message: string;
-  created_at: number;
 }>;
 
-const ChatList: React.FC<Props> = (props: Props) => {
+const ChatList: React.FC = () => {
+  const dispatch = useDispatch();
+  const selector = useSelector((state) => state);
+  const chatsdata = fetchChatsdata(selector);
+
+  useEffect(() => {
+    dispatch(fetchChats());
+  }, []);
+
   return (
-    <ul>
-      <li>
-        <span>{props.username}</span>
-        &nbsp;
-        {props.message}
-      </li>
-    </ul>
+    <>
+      <ul>
+        {chatsdata &&
+          chatsdata.map((chat: Chats) => (
+            <li key={chat.id}>
+              {chat.username}: {chat.message}
+            </li>
+          ))}
+      </ul>
+    </>
   );
 };
 
