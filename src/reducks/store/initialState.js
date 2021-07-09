@@ -4,6 +4,7 @@ const initialState = {
     username: "",
     message: "",
     created_at: Number,
+    chatsdata: [],
   },
 };
 
