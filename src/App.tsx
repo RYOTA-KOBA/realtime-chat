@@ -1,5 +1,6 @@
 import React from "react";
 import "./styles/App.css";
+import styled from "styled-components";
 import { useSelector } from "react-redux";
 import { getUsername } from "./reducks/chats/selectors";
 import { InitialChatsState } from "./reducks/chats/types";
@@ -7,21 +8,24 @@ import { InitialChatsState } from "./reducks/chats/types";
 import UsernameForm from "./components/UsernameForm";
 import MessageForm from "./components/MessageForm";
 import ChatList from "./components/ChatList";
-import DisplayUsername from "./components/DisplayUsername";
+import { Header } from "./components/Header";
 
 const App: React.FC = () => {
   const selector = useSelector((state: InitialChatsState) => state);
   const username = getUsername(selector);
 
   return (
-    <>
+    <Wrapper>
+      <Header />
       <ChatList />
-      <div style={{ display: "flex" }}>
-        <DisplayUsername />
-        {username !== "" ? <MessageForm /> : <UsernameForm />}
-      </div>
-    </>
+      {username !== "" ? <MessageForm /> : <UsernameForm />}
+    </Wrapper>
   );
 };
 
 export default App;
+
+const Wrapper = styled.div`
+  max-width: 728px;
+  margin: 0 auto;
+`;
