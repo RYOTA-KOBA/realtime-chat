@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import { fetchChatsdata, getUsername } from "../reducks/chats/selectors";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchChats } from "../reducks/chats/operations";
@@ -18,10 +18,16 @@ const ChatList: React.FC = () => {
   const selector = useSelector((state: InitialChatsState) => state);
   const chatsdata = fetchChatsdata(selector);
   const username = getUsername(selector);
+  const scrollToBottom = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     dispatch(fetchChats());
   }, []);
+
+  //メッセージ入力時に自動でスクロール
+  if (scrollToBottom && scrollToBottom.current) {
+    scrollToBottom.current.scrollIntoView({ block: "end", behavior: "smooth" });
+  }
 
   return (
     <Wrapper>
@@ -41,6 +47,7 @@ const ChatList: React.FC = () => {
               </ListItem>
             )
           )}
+        <div ref={scrollToBottom} />
       </List>
     </Wrapper>
   );
