@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { addMessage } from "../reducks/chats/operations";
 import { getUsername } from "../reducks/chats/selectors";
 import { InitialChatsState } from "../reducks/chats/types";
+import { Wapper, Input, Button } from "./UsernameForm";
 
 const MessageForm: React.FC = () => {
   const dispatch = useDispatch();
@@ -25,18 +26,18 @@ const MessageForm: React.FC = () => {
   };
 
   return (
-    <form onSubmit={sendMessage}>
-      <input
+    <Wapper onSubmit={sendMessage}>
+      <Input
         type="text"
         value={messageValue}
         onChange={inputMessage}
         placeholder="メッセージを入力"
       />
 
-      <button type="submit" disabled={!messageValue}>
+      <Button type="submit" disabled={!messageValue}>
         送信
-      </button>
-    </form>
+      </Button>
+    </Wapper>
   );
 };
 
