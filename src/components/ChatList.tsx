@@ -61,6 +61,15 @@ const List = styled.ul`
   margin: 10vh 0;
   overflow-y: scroll;
   background: #d1d1e9;
+  &::-webkit-scrollbar {
+    width: 10px;
+  }
+  &::-webkit-scrollbar-thumb {
+    background-color: #e45858;
+  }
+  &::-webkit-scrollbar-track {
+    background-color: #d1d1e9;
+  }
 `;
 const ListItem = styled.li`
   list-style: none;
