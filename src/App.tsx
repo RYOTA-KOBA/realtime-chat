@@ -1,5 +1,4 @@
 import React from "react";
-import "./styles/App.css";
 import styled from "styled-components";
 import { useSelector } from "react-redux";
 import { getUsername } from "./reducks/chats/selectors";
