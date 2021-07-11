@@ -44,9 +44,6 @@ export const fetchChats = () => {
             case "added":
               chats.push({ ...data, id: change.doc.id });
               break;
-            // case "removed":
-            //   chats = chats.filter((chat) => chat.id !== change.doc.id);
-            //   break;
             default:
               break;
           }
