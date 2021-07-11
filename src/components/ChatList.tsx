@@ -109,8 +109,8 @@ const OwnListItem = styled.li`
 `;
 const Username = styled.p`
   color: #555555;
-  width: 15%;
-  max-width: 15%;
+  width: 10%;
+  max-width: 10%;
   overflow-wrap: break-word;
   margin-top: 12px;
   margin-right: 5px;
