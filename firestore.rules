@@ -3,9 +3,10 @@ service cloud.firestore {
   match /databases/{database}/documents {
 
     function isValidChatCreate(chat) {
-      return chat.size() >= 2
+      return chat.size() >= 3
       && 'username' in chat && chat.username is string
       && 'created_at' in chat && chat.created_at is timestamp
+      && 'message' in chat && chat.message is string
     }
 
     match /chats/{chatId} {
