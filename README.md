@@ -15,6 +15,7 @@ React(TypeScript), Redux, Firestore, styled-components
 - TypeScript を使用して型安全なコードを意識しました。
 - firestore にセキュリティルールを設定することで予期せぬスキーマが db に登録されないようにしました。
 - コードフォーマッターには Prettier、静的検証には eslint を用いています。
+- scrollIntoViewメソッドを用いて自動スクロール(投稿すると自動で下までスクロールする)機能を実装しました。
 
 ### 配色の参考
 
